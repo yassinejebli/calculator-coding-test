@@ -25,9 +25,7 @@ class App extends Component {
 
     this.setState({
       newItem: {
-        userType: newItem.userType,
-        price: newItem.price,
-        endDate: newItem.endDate,
+        ...newItem,
         adType: parseInt(event.target.value, 10),
       },
     });
@@ -35,12 +33,9 @@ class App extends Component {
 
   onUserTypeChanged = (event) => {
     const { newItem } = this.state;
-
     this.setState({
       newItem: {
-        adType: newItem.adType,
-        price: newItem.price,
-        endDate: newItem.endDate,
+        ...newItem,
         userType: parseInt(event.target.value, 10),
       },
     });
@@ -64,10 +59,8 @@ class App extends Component {
 
     this.setState({
       newItem: {
-        adType: newItem.adType,
-        userType: newItem.userType,
-        endDate: newItem.endDate,
-        price: Number(event.target.value), // price should be a number not a string
+        ...newItem,
+        price: Number(event.target.value),
       },
     });
   };
@@ -77,9 +70,7 @@ class App extends Component {
 
     this.setState({
       newItem: {
-        adType: newItem.adType,
-        userType: newItem.userType,
-        price: newItem.price,
+        ...newItem,
         endDate: event.target.value,
       },
     });
