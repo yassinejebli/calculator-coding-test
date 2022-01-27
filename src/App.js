@@ -3,6 +3,7 @@ import moment from "moment";
 import "./App.css";
 import { Calculator } from "./calculator";
 import { AD_TYPES, USER_TYPES } from "./constants";
+import Header from "./Header";
 
 class App extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class App extends Component {
     };
   }
 
-  onadTypeChange = (event) => {
+  onAdTypeChange = (event) => {
     const { newItem } = this.state;
 
     this.setState({
@@ -37,6 +38,22 @@ class App extends Component {
       newItem: {
         ...newItem,
         userType: parseInt(event.target.value, 10),
+      },
+    });
+  };
+
+  // Generic change handler
+  onValueChanged = (event) => {
+    const { newItem } = this.state;
+    const valueShouldBeParsed = ["adType", "userType", "price"].includes(
+      event.target.name
+    );
+    this.setState({
+      newItem: {
+        ...newItem,
+        [event.target.name]: valueShouldBeParsed
+          ? Number(event.target.value)
+          : event.target.value,
       },
     });
   };
@@ -80,10 +97,8 @@ class App extends Component {
     const { newItem, total } = this.state;
 
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to Solid Fee Calculator</h1>
-        </header>
+      <div>
+        <Header />
         <div className="App-page">
           <h2>Items</h2>
 
@@ -95,9 +110,9 @@ class App extends Component {
               <label>You are</label>
               <select
                 className="form-control"
-                id="adType"
+                name="adType"
                 defaultValue="-1"
-                onChange={this.onUserTypeChanged}
+                onChange={this.onValueChanged}
               >
                 <option value="-1">Select</option>
                 <option value={USER_TYPES.PERSON}>Person</option>
@@ -106,12 +121,12 @@ class App extends Component {
             </div>
 
             <div className="form-group">
-              <label>Item Type</label>
+              <label>Ad Type</label>
               <select
                 className="form-control"
-                id="adType"
+                name="adType"
                 defaultValue="-1"
-                onChange={this.onadTypeChange}
+                onChange={this.onValueChanged}
               >
                 <option value="-1">Select </option>
                 <option value={AD_TYPES.AUCTION}>Auction</option>
@@ -123,9 +138,11 @@ class App extends Component {
               <label htmlFor="adType">Price</label>
               <input
                 className="form-control"
+                name="price"
                 type="number"
+                min={0}
                 value={newItem.price}
-                onChange={this.onPriceChanged}
+                onChange={this.onValueChanged}
               />
             </div>
 
@@ -133,9 +150,10 @@ class App extends Component {
               <label htmlFor="adType">End date</label>
               <input
                 className="form-control"
-                type="text"
+                name="endDate"
+                type="text" // date
                 value={newItem.endDate}
-                onChange={this.onEndDateChanged}
+                onChange={this.onValueChanged}
               />
             </div>
 
