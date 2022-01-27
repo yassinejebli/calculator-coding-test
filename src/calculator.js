@@ -2,14 +2,14 @@ import moment from "moment";
 import { USER_TYPES, AD_TYPES } from "./constants";
 
 export class Calculator {
-  getFee({ userType, itemType, price, endDate }) {
-    const typeAdCost = this.getAdCost(itemType);
+  getFee({ userType, adType, price, endDate }) {
+    const typeAdCost = this.getAdCost(adType);
     const discount = this.getDiscount(userType, endDate);
     return price + typeAdCost - discount;
   }
 
-  getAdCost(itemType) {
-    switch (itemType) {
+  getAdCost(adType) {
+    switch (adType) {
       case AD_TYPES.AUCTION:
         return 25;
       case AD_TYPES.BUY_IT_NOW:

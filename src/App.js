@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
-import './App.css';
-import {Calculator} from './calculator';
-import moment from 'moment';
+import React, { Component } from "react";
+import moment from "moment";
+import "./App.css";
+import { Calculator } from "./calculator";
+import { AD_TYPES, USER_TYPES } from "./constants";
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +12,7 @@ class App extends Component {
       items: [],
       total: 0,
       newItem: {
-        itemType: -1,
+        adType: -1,
         userType: -1,
         price: 100,
         endDate: moment().format("YYYY-MM-DD"),
@@ -19,37 +20,37 @@ class App extends Component {
     };
   }
 
-  onItemTypeChange = event => {
-    const {newItem} = this.state;
+  onadTypeChange = (event) => {
+    const { newItem } = this.state;
 
     this.setState({
       newItem: {
         userType: newItem.userType,
         price: newItem.price,
         endDate: newItem.endDate,
-        itemType: parseInt(event.target.value, 10),
-      }
+        adType: parseInt(event.target.value, 10),
+      },
     });
   };
 
-  onUserTypeChanged = event => {
-    const {newItem} = this.state;
+  onUserTypeChanged = (event) => {
+    const { newItem } = this.state;
 
     this.setState({
       newItem: {
-        itemType: newItem.itemType,
+        adType: newItem.adType,
         price: newItem.price,
         endDate: newItem.endDate,
         userType: parseInt(event.target.value, 10),
-      }
+      },
     });
   };
 
-  onNewItemSubmit = event => {
+  onNewItemSubmit = (event) => {
     event.preventDefault();
 
     const calc = new Calculator();
-    const {newItem} = this.state;
+    const { newItem } = this.state;
     const fee = calc.getFee(newItem);
 
     // update total
@@ -58,34 +59,34 @@ class App extends Component {
     });
   };
 
-  onPriceChanged = event => {
-    const {newItem} = this.state;
+  onPriceChanged = (event) => {
+    const { newItem } = this.state;
 
     this.setState({
       newItem: {
-        itemType: newItem.itemType,
+        adType: newItem.adType,
         userType: newItem.userType,
         endDate: newItem.endDate,
-        price: event.target.value
-      }
+        price: Number(event.target.value), // price should be a number not a string
+      },
     });
   };
 
-  onEndDateChanged = event => {
-    const {newItem} = this.state;
+  onEndDateChanged = (event) => {
+    const { newItem } = this.state;
 
     this.setState({
       newItem: {
-        itemType: newItem.itemType,
+        adType: newItem.adType,
         userType: newItem.userType,
         price: newItem.price,
         endDate: event.target.value,
-      }
+      },
     });
   };
 
   render() {
-    const {newItem, total} = this.state;
+    const { newItem, total } = this.state;
 
     return (
       <div className="App">
@@ -103,12 +104,13 @@ class App extends Component {
               <label>You are</label>
               <select
                 className="form-control"
-                id="itemType"
+                id="adType"
                 defaultValue="-1"
-                onChange={this.onUserTypeChanged}>
+                onChange={this.onUserTypeChanged}
+              >
                 <option value="-1">Select</option>
-                <option value="0">Person</option>
-                <option value="1">Company</option>
+                <option value={USER_TYPES.PERSON}>Person</option>
+                <option value={USER_TYPES.COMPANY}>Company</option>
               </select>
             </div>
 
@@ -116,23 +118,34 @@ class App extends Component {
               <label>Item Type</label>
               <select
                 className="form-control"
-                id="itemType"
+                id="adType"
                 defaultValue="-1"
-                onChange={this.onItemTypeChange}>
+                onChange={this.onadTypeChange}
+              >
                 <option value="-1">Select </option>
-                <option value="0">Auction</option>
-                <option value="1">Buy it now</option>
+                <option value={AD_TYPES.AUCTION}>Auction</option>
+                <option value={AD_TYPES.BUY_IT_NOW}>Buy it now</option>
               </select>
             </div>
 
             <div className="form-group">
-              <label htmlFor="itemType">Price</label>
-              <input className="form-control" type="number" value={newItem.price} onChange={this.onPriceChanged}  />
+              <label htmlFor="adType">Price</label>
+              <input
+                className="form-control"
+                type="number"
+                value={newItem.price}
+                onChange={this.onPriceChanged}
+              />
             </div>
 
             <div className="form-group">
-              <label htmlFor="itemType">End date</label>
-              <input className="form-control" type="text" value={newItem.endDate} onChange={this.onEndDateChanged}  />
+              <label htmlFor="adType">End date</label>
+              <input
+                className="form-control"
+                type="text"
+                value={newItem.endDate}
+                onChange={this.onEndDateChanged}
+              />
             </div>
 
             <input type="submit" className="btn btn-primary" value="Submit" />
