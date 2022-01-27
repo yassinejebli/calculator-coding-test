@@ -1,38 +1,31 @@
-import moment from 'moment';
+import moment from "moment";
+import { USER_TYPES, AD_TYPES } from "./constants";
 
 export class Calculator {
-  getFee({userType, itemType, price, endDate}) {    
-    switch (userType) {
-      case 0: //Normal
-        if (itemType === 0) {
-          //Auction
-          let endDateDiscount = 0;
-          const isToday = moment(endDate).isSame(moment(), 'day');
-          if (isToday) {
-            endDateDiscount = 10;
-          }
-          return price + 25 - endDateDiscount;
-        } else if (itemType === 1) {
-          //BuyItNow
-          return price + 35 - 0;
-        }
-        break;
-      case 1: //Company
-        if (itemType === 0) {
-          //Auction
-          const isToday = moment(endDate).isSame(moment(), 'day');
-          if (isToday) {
-            return price + 25 - 15; // Enddate discount and company discount
-          }
+  getFee({ userType, itemType, price, endDate }) {
+    const typeAdCost = this.getAdCost(itemType);
+    const discount = this.getDiscount(userType, endDate);
+    return price + typeAdCost - discount;
+  }
 
-          return price + 25 - 5; // Only company discount
-        } else if (itemType === 1) {
-          //BuyItNow
-          return price + 35 - 5;
-        }
-        break;
+  getAdCost(itemType) {
+    switch (itemType) {
+      case AD_TYPES.AUCTION:
+        return 25;
+      case AD_TYPES.BUY_IT_NOW:
+        return 35;
       default:
-        throw new Error('Unknown user type');
+        throw new Error("Unknown ad cost type");
     }
+  }
+
+  getDiscount(userType, date) {
+    let discount = 0;
+    const isCompany = userType === USER_TYPES.COMPANY;
+    const isToday = moment(date).isSame(moment(), "day");
+    if (isCompany) discount = 5;
+    if (isToday) discount += 10;
+
+    return discount;
   }
 }
