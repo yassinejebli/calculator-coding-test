@@ -21,27 +21,6 @@ class App extends Component {
     };
   }
 
-  onAdTypeChange = (event) => {
-    const { newItem } = this.state;
-
-    this.setState({
-      newItem: {
-        ...newItem,
-        adType: parseInt(event.target.value, 10),
-      },
-    });
-  };
-
-  onUserTypeChanged = (event) => {
-    const { newItem } = this.state;
-    this.setState({
-      newItem: {
-        ...newItem,
-        userType: parseInt(event.target.value, 10),
-      },
-    });
-  };
-
   // Generic change handler
   onValueChanged = (event) => {
     const { newItem } = this.state;
@@ -68,28 +47,6 @@ class App extends Component {
     // update total
     this.setState({
       total: this.state.total + fee,
-    });
-  };
-
-  onPriceChanged = (event) => {
-    const { newItem } = this.state;
-
-    this.setState({
-      newItem: {
-        ...newItem,
-        price: Number(event.target.value),
-      },
-    });
-  };
-
-  onEndDateChanged = (event) => {
-    const { newItem } = this.state;
-
-    this.setState({
-      newItem: {
-        ...newItem,
-        endDate: event.target.value,
-      },
     });
   };
 
