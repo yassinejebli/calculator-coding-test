@@ -5,13 +5,13 @@ import { Calculator } from "./calculator";
 import { AD_TYPES, USER_TYPES } from "./constants";
 import Header from "./Header";
 
+const calc = new Calculator();
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       items: [],
-      total: 0,
       newItem: {
         adType: -1,
         userType: -1,
@@ -37,21 +37,28 @@ class App extends Component {
     });
   };
 
+  // TODO: form validation
   onNewItemSubmit = (event) => {
     event.preventDefault();
 
-    const calc = new Calculator();
-    const { newItem } = this.state;
-    const fee = calc.getFee(newItem);
+    const { newItem, items } = this.state;
 
-    // update total
+    // save the new item
     this.setState({
-      total: this.state.total + fee,
+      newItem: {
+        adType: -1,
+        userType: -1,
+        price: 100,
+        endDate: moment().format("YYYY-MM-DD"),
+      },
+      // append the new item
+      items: [...items, newItem],
     });
   };
-
   render() {
-    const { newItem, total } = this.state;
+    const { newItem, items } = this.state;
+    // Remove total from state as it can be calculated from this.state.items
+    const total = items.reduce((prev, curr) => prev + calc.getFee(curr), 0);
 
     return (
       <div>
